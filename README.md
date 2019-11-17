@@ -9,10 +9,10 @@ You can easily add a person that is in the room with you and the salary it makes
 # Download application
 
 ## Android
-<img src="https://raw.githubusercontent.com/danielrataj/meeting_costs/master/assets/images/qr/download-android.png" alt="logo" width="128" height="128" align="right" />
+<img src="https://raw.githubusercontent.com/danielrataj/meeting_costs/master/assets/images/qr/download-android.png" alt="logo" width="128" height="128" />
 
 ## iOS
-<img src="https://raw.githubusercontent.com/danielrataj/meeting_costs/master/assets/images/qr/download-ios.png" alt="logo" width="128" height="128" align="right" />
+<img src="https://raw.githubusercontent.com/danielrataj/meeting_costs/master/assets/images/qr/download-ios.png" alt="logo" width="128" height="128" />
 
 ## License
 [![License](http://img.shields.io/:license-mit-blue.svg?style=flat-square)](http://badges.mit-license.org)
