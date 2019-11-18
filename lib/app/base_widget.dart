@@ -3,9 +3,10 @@ import 'package:provider/provider.dart';
 import 'package:meeting_costs/model/Cost.dart';
 
 class BaseWidget extends StatefulWidget {
-  const BaseWidget({Key key, this.child}) : super(key: key);
+  const BaseWidget({Key key, this.child, this.appBar = false}) : super(key: key);
 
   final Widget child;
+  final bool appBar;
 
   @override
   _BaseWidgetState createState() => _BaseWidgetState();
@@ -15,6 +16,7 @@ class _BaseWidgetState extends State<BaseWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: widget.appBar ? AppBar(): null,
       body: Container(
         constraints: BoxConstraints.expand(),
         decoration: BoxDecoration(

@@ -123,7 +123,7 @@ class _CounterState extends State<Counter> {
       ));
 
     return WillPopScope(
-        onWillPop: () {
+        onWillPop: () async {
           showDialog(
               context: context,
               builder: (BuildContext context) {
@@ -148,9 +148,10 @@ class _CounterState extends State<Counter> {
                   ],
                 );
               });
-          return;
+              return false;
         },
         child: BaseWidget(
+          appBar: true,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
