@@ -16,6 +16,7 @@ class _PersonState extends State<Person> {
 
   Widget build(BuildContext context) {
     return BaseWidget(
+      appBar: true,
       child: Container(
         padding: EdgeInsets.only(top: 50, left: 10, bottom: 10, right: 10),
         child: Stack(children: <Widget>[
