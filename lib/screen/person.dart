@@ -18,7 +18,7 @@ class _PersonState extends State<Person> {
     return BaseWidget(
       appBar: true,
       child: Container(
-        padding: EdgeInsets.only(top: 50, left: 10, bottom: 10, right: 10),
+        padding: EdgeInsets.only(top: 20, left: 10, bottom: 10, right: 10),
         child: Stack(children: <Widget>[
           Form(
             key: _formKey,
@@ -102,8 +102,8 @@ class _PersonState extends State<Person> {
                       Navigator.of(context).pushNamed(Routes.dashboard);
                     }
                   },
-                  label: Text('add'),
-                  icon: Icon(Icons.add),
+                  label: Text('save'),
+                  icon: Icon(Icons.save),
                 );
               },
             ),
