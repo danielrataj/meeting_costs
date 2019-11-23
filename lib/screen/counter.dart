@@ -1,9 +1,12 @@
 import 'dart:async';
+import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_money_formatter/flutter_money_formatter.dart';
+import 'package:flutter_mailer/flutter_mailer.dart';
 import 'package:circle_wave_progress/circle_wave_progress.dart';
 import 'package:meeting_costs/app/base_widget.dart';
 import 'package:meeting_costs/model/Cost.dart';
+import 'package:meeting_costs/model/App.dart';
 
 class Counter extends StatefulWidget {
   @override
@@ -106,6 +109,30 @@ class _CounterState extends State<Counter> {
     );
   }
 
+  Future<void> sendMail({CostModel costModel, String moneyPerSeconds}) async {
+    List<Cost> allItems = await costModel.findAll();
+
+    StringBuffer body = StringBuffer();
+
+    allItems.forEach((item) {
+      body.write(
+          'Attendees: ${item.multiply} x ${FlutterMoneyFormatter(amount: item.value).output.nonSymbol}');
+      body.write("<br>");
+      body.write(
+          "Time spent on meeting: ${simpleDurationFormat(_datetime.difference(_now)).toString()}");
+      body.write("<br>");
+      body.write('Total costs: $moneyPerSeconds');
+
+      body.write("<br><br><br>");
+      body.write('||| Powered by Meeting Costs mobile app.');
+    });
+
+    final MailOptions mailOptions = MailOptions(
+        body: body.toString(), subject: 'Meeting Costs Report', isHTML: true);
+
+    await FlutterMailer.send(mailOptions);
+  }
+
   Widget build(BuildContext context) {
     final CostModel costModel = ModalRoute.of(context).settings.arguments;
     double spentPerSeconds =
@@ -114,13 +141,38 @@ class _CounterState extends State<Counter> {
         FlutterMoneyFormatter(amount: spentPerSeconds).output.nonSymbol;
 
     _menuItems = List()
-      ..add(PopupMenuItem(
-          enabled: !_counterActive, value: 1, child: Text('continue counting')))
-      ..add(PopupMenuItem(
-        enabled: _counterActive,
-        value: 0,
-        child: Text('stop counting'),
-      ));
+      ..add(!_counterActive
+          ? PopupMenuItem(
+              enabled: !_counterActive,
+              value: 1,
+              child: ListTile(
+                dense: true,
+                leading: Icon(Icons.play_arrow),
+                title: Text('continue counting'),
+              ))
+          : null)
+      ..add(_counterActive
+          ? PopupMenuItem(
+              enabled: _counterActive,
+              value: 0,
+              child: ListTile(
+                dense: true,
+                leading: Icon(Icons.pause),
+                title: Text('stop counting'),
+              ),
+            )
+          : null)
+      ..add(!_counterActive
+          ? PopupMenuItem(
+              enabled: !_counterActive,
+              value: 2,
+              child: ListTile(
+                dense: true,
+                leading: Icon(Icons.email),
+                title: Text('send results'),
+              ),
+            )
+          : null);
 
     return WillPopScope(
         onWillPop: () async {
@@ -148,7 +200,7 @@ class _CounterState extends State<Counter> {
                   ],
                 );
               });
-              return false;
+          return false;
         },
         child: BaseWidget(
           appBar: true,
@@ -172,30 +224,54 @@ class _CounterState extends State<Counter> {
               Container(
                 height: 10,
               ),
-              PopupMenuButton(
-                tooltip: "settings",
-                child: Ink(
-                  decoration: ShapeDecoration(
-                      color: Theme.of(context).textTheme.body2.color,
-                      shape: CircleBorder()),
-                  child: Padding(
-                    padding: EdgeInsets.all(5),
-                    child: Icon(Icons.settings, size: 40),
+              Consumer<AppModel>(builder: (context, appModel, child) {
+                return PopupMenuButton(
+                  tooltip: "settings",
+                  child: Ink(
+                    decoration: ShapeDecoration(
+                        color: Theme.of(context).textTheme.body2.color,
+                        shape: CircleBorder()),
+                    child: Padding(
+                      padding: EdgeInsets.all(5),
+                      child: Icon(Icons.settings, size: 40),
+                    ),
                   ),
-                ),
-                onSelected: (value) {
-                  if (value == 0) {
-                    stopCounter();
-                  }
+                  onSelected: (value) async {
+                    // stop counter
+                    if (value == 0) {
+                      stopCounter();
+                    }
 
-                  if (value == 1) {
-                    startCounter();
-                  }
-                },
-                itemBuilder: (BuildContext context) {
-                  return _menuItems;
-                },
-              )
+                    // start counter
+                    if (value == 1) {
+                      startCounter();
+                    }
+
+                    // send mail
+                    if (value == 2) {
+                      stopCounter();
+
+                      String platformResponse;
+
+                      try {
+                        await sendMail(
+                            costModel: costModel,
+                            moneyPerSeconds: moneyPerSeconds);
+                      } catch (error) {
+                        platformResponse = error.toString();
+                        if (!mounted) return;
+
+                        appModel.scaffoldKey.currentState.showSnackBar(SnackBar(
+                          content: Text(platformResponse),
+                        ));
+                      }
+                    }
+                  },
+                  itemBuilder: (BuildContext context) {
+                    return _menuItems;
+                  },
+                );
+              })
             ],
           ),
         ));
