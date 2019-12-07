@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart' show PlatformException;
 import 'dart:async';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
@@ -130,7 +131,7 @@ class _CounterState extends State<Counter> {
     final MailOptions mailOptions = MailOptions(
         body: body.toString(), subject: 'Meeting Costs Report', isHTML: true);
 
-    await FlutterMailer.send(mailOptions);
+    return await FlutterMailer.send(mailOptions);
   }
 
   Widget build(BuildContext context) {
@@ -251,18 +252,18 @@ class _CounterState extends State<Counter> {
                     if (value == 2) {
                       stopCounter();
 
-                      String platformResponse;
-
                       try {
                         await sendMail(
                             costModel: costModel,
                             moneyPerSeconds: moneyPerSeconds);
-                      } catch (error) {
-                        platformResponse = error.toString();
+                      } on PlatformException catch (error) {
+                        String platformResponse = error.toString();
+                        print(platformResponse);
+
                         if (!mounted) return;
 
                         appModel.scaffoldKey.currentState.showSnackBar(SnackBar(
-                          content: Text(platformResponse),
+                          content: Text("It is not possible to send an email from your device."),
                         ));
                       }
                     }

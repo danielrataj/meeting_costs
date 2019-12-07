@@ -1,5 +1,7 @@
 PODS:
   - Flutter (1.0.0)
+  - flutter_mailer (0.0.1):
+    - Flutter
   - flutter_money_formatter (0.0.1):
     - Flutter
   - FMDB (2.7.5):
@@ -15,6 +17,7 @@ PODS:
 
 DEPENDENCIES:
   - Flutter (from `.symlinks/flutter/ios`)
+  - flutter_mailer (from `.symlinks/plugins/flutter_mailer/ios`)
   - flutter_money_formatter (from `.symlinks/plugins/flutter_money_formatter/ios`)
   - shared_preferences (from `.symlinks/plugins/shared_preferences/ios`)
   - sqflite (from `.symlinks/plugins/sqflite/ios`)
@@ -27,6 +30,8 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   Flutter:
     :path: ".symlinks/flutter/ios"
+  flutter_mailer:
+    :path: ".symlinks/plugins/flutter_mailer/ios"
   flutter_money_formatter:
     :path: ".symlinks/plugins/flutter_money_formatter/ios"
   shared_preferences:
@@ -38,6 +43,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
+  flutter_mailer: 2ef5a67087bc8c6c4cefd04a178bf1ae2c94cd83
   flutter_money_formatter: d0d18ddc5be333fad8d09964d741b59fa11a91dc
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   shared_preferences: 1feebfa37bb57264736e16865e7ffae7fc99b523
