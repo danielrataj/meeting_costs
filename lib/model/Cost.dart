@@ -29,12 +29,6 @@ class CostModel extends ChangeNotifier {
       : 0;
 
   Future<List<Cost>> findAll() async {
-    /*
-    if (_items.length > 0) {
-      return Future.value(_items);
-    }
-    */
-
     final db = await database;
 
     var dbAll = await db.query("cost");
@@ -105,7 +99,11 @@ class Cost {
       this.per});
 
   double get totalValue {
-    return this.value * this.multiply;
+    if (this.value != null) {
+      return this.value * this.multiply;
+    }
+
+    return 0;
   }
 
   Map<String, dynamic> toMap() {

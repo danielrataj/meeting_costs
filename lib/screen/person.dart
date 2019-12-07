@@ -33,8 +33,12 @@ class _PersonState extends State<Person> {
                 TextFormField(
                   autofocus: true,
                   keyboardType: TextInputType.numberWithOptions(decimal: true),
-                  validator: (value) {
+                  validator: (String value) {
                     if (value.isEmpty) {
+                      return 'Please enter salary for the atendee.';
+                    }
+
+                    if (value == "0") {
                       return 'Please enter salary for the atendee.';
                     }
 
